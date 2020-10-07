@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jquery Assignment</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://rawgit.com/asmsuechan/jquery_push_notification/master/push_notification.min.js"></script>
+	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript">
+		$(document).ready(function(){
+      
+			$("#c1").click(function()
+				{
+                  
+                   var modal = document.getElementById("myModal");
+                   modal.style.display = "none";
+				}); 
+		
+			$("#btn1").click(function() {
+            $(this).parent().remove();
+                   });
+		
+			var ipaddress="";
+			var id=0;
+			var code="";
+			
+			function createtable()
+			{
+				alert(ipaddress);
+				alert(code);
+				var content=$("#t1");
+                 row = $('<tr></tr>');
+                 var rowData = $('<td></td>').addClass('bar').text(ipaddress);
+                 var rowData1=$('<td></td>').addClass('bar1').text(code);
+                 var rowData2=$('<td><button id="btn1" >Delete</button></td>').addClass('Delete');
+                 row.append(rowData);
+                 row.append(rowData1);
+                 row.append(rowData2);
+                 rowData2.click(function abc()
+                 {
+					var a=$(this).parent();
+					var b=a.find(".bar").html();
+					var c=a.find(".bar1").html();
+					// var pi=document.getElementById("p1");
+					var p1 = $("#p1");
+					p1.text("Ip address:"+b+" and country:" +c+ " is deleted");
+            	    console.log(p1.text());
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "block";
+                     
+                     $(this).parent().remove();
+                 });
+                 content.append(row);
+				
+		
+			}
+			function validate(ip)
+		                     {
+			if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ip))
+                                {
+                                	
+                                  return (true);
+                                }
+                                 var p1 = $("#p1");
+					             p1.text("Invalid IP Address"); 
+					             var modal = document.getElementById("myModal");
+                                   modal.style.display = "block";
+                                  $(i1).val("");
+                                  return false;
+		           }
+			function MySuccessFunction(r){
+				code=r.country_code;
+				createtable();
+		}
+		function OnError()
+		{
+			alert('helo');
+		}
+
+               $("#b1").click(function(){
+              var ip=$(i1).val();
+               	var a=validate(ip);
+               	if(a)
+               	{
+               		ipaddress=ip;
+               		var settings={
+				type:"GET",
+				dataType:"json",
+            	url: "https://freegeoip.app/json/"+ipaddress,
+				success: MySuccessFunction,
+				error: OnError
+			};
+			$.ajax(settings);
+			console.log("Request Send");           
+                }  
+
+             
+           });
+         });
+	</script>
+</head>
+<body>
+	<div id="d1">
+   <span id="h">Input Data</span>
+
+   <span id="h1">Ip Address:</span>
+   <input id="i1" type="text" name="ip Address" placeholder="Ip Address"/>
+   <input id="b1" type="submit" name="button" value="Submit"/>
+   <table id="t1">
+   	<tr>
+    <th>Ip address</th>
+    <th>Country</th>
+    <th>Delete</th>
+    </tr>
+   </table>
+</div>
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="p1">Some text in the Modal..</p>
+    <button id="c1">Close</button>
+  </div>
+
+</div>
+</body>
+</html>
